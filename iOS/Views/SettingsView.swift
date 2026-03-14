@@ -631,7 +631,7 @@ private struct AboutSettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                Text("Track and categorize your spending from Halifax bank statements.")
+                Text("Your spending, sorted.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -661,18 +661,18 @@ private struct HelpSettingsView: View {
             Divider()
 
             VStack(alignment: .leading, spacing: 12) {
-                Text("MoneyMonitor helps you track and categorize your spending from Halifax bank statements.")
+                Text("See exactly where your money goes. Import your Halifax statement and start sorting your spending.")
                     .font(.callout)
 
-                Text("Getting Started")
+                Text("Getting started")
                     .font(.callout.bold())
-                Text("1. Export your transactions as CSV or PDF from Halifax online banking\n2. Import the file into the app\n3. Tap each transaction to assign it to a category\n4. View your spending breakdown on the Spending tab")
+                Text("1. Download your statement from Halifax online banking\n2. Import the CSV or PDF into the app\n3. Tap a payment to sort it into a category\n4. Check the Spending tab to see the bigger picture")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                Text("Tips")
+                Text("Good to know")
                     .font(.callout.bold())
-                Text("When you categorize a transaction, all other transactions with the same description are automatically categorized too.")
+                Text("Sort one payment and every matching one is done automatically. So if you categorise one Tesco shop, they're all sorted in one go.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

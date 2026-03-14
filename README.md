@@ -1,20 +1,18 @@
 # Money Monitor
 
-A personal finance app for macOS and iOS designed for Halifax bank customers. Import your bank statements, categorise transactions, and visualise where your money goes with interactive charts.
+See exactly where your money goes. Import your Halifax bank statements, sort your spending into categories, and get a clear picture of your finances — all from your menu bar.
 
-## Features
+Your data stays on your device. No accounts, no servers, no tracking.
 
-- **Statement import** — Import Halifax bank statements in CSV or PDF format
-- **Auto-categorisation** — Assign a category once and all matching transactions are categorised automatically
-- **14 default categories** — Housing, Bills & Utilities, Supermarkets, Transport, Shopping, Eating Out, Subscriptions, Travel, Health & Fitness, Entertainment, Financial, Transfers, Gambling, and Other
-- **Occasion tracking** — Tag spending for holidays, birthdays, weddings, Christmas, and 11 other life events
-- **Spending charts** — Interactive donut chart with hover details and category breakdown
-- **PDF reports** — Export monthly spending summaries as PDF (macOS)
-- **Customisable menu bar icon** — Colour donut chart by default, with a monochrome option in settings
-- **Help & FAQ** — Built-in knowledge base and contact form for feedback
-- **iOS share extension** — Import statements directly from the Files app
-- **macOS menu bar app** — Quick access without cluttering the dock
-- **Data stays on device** — No servers, no accounts, no tracking
+## What you can do
+
+- **Import statements** — Drop in a CSV or PDF from Halifax and you're away
+- **Sort your spending** — Categorise a payment once and matching ones are done automatically
+- **Track life events** — Tag spending for holidays, birthdays, Christmas, and more with Occasions
+- **See the bigger picture** — Interactive charts show you where your money's going each month
+- **Export reports** — Download a monthly spending summary as PDF (macOS)
+- **Share extension** — Import statements straight from the Files app on iOS
+- **Menu bar access** — Quick glance at your spending without leaving what you're doing (macOS)
 
 ## Platforms
 
@@ -23,41 +21,36 @@ A personal finance app for macOS and iOS designed for Halifax bank customers. Im
 | macOS    | 14.0+          | Menu bar app with resizable popover |
 | iOS      | 17.0+          | Full app with share extension |
 
-## Building
+## Getting started
 
 The project uses [XcodeGen](https://github.com/yonaskolb/XcodeGen) to generate the Xcode project.
 
 ```bash
-# Install XcodeGen if you haven't already
 brew install xcodegen
-
-# Generate the Xcode project
 xcodegen generate
-
-# Open in Xcode
 open MoneyMonitor.xcodeproj
 ```
 
-## Project Structure
+## Project structure
 
 ```
 Shared/
-  Helpers/         CSV and PDF importers
+  Helpers/         CSV and PDF importers, currency formatting
   Model/           SwiftData models (Transaction, Category, Occasion, AppSettings)
 iOS/
   App/             iOS app entry point
   Views/           ContentView, TransactionList, CategoryPicker, SpendingChart, Settings
   Resources/       Asset catalogue, entitlements, Info.plist
-  ShareExtension/  Share extension for importing from Files app
+  ShareExtension/  Import statements from the Files app
 macOS/
   App/             macOS app entry point (MenuBarExtra)
   Helpers/         Launch-at-login helper
   Views/           MenuBarView, TransactionList, CategoryPicker, SpendingChart, Settings, About, Onboarding
-  Resources/       Asset catalogue (app icon + menu bar icons), entitlements, Info.plist
+  Resources/       Asset catalogue, entitlements, Info.plist
 Tests/             Unit tests for importers
 ```
 
-## Tech Stack
+## Built with
 
 - SwiftUI
 - SwiftData

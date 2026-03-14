@@ -14,7 +14,7 @@ struct OnboardingView: View {
             Text("Welcome to Money Monitor")
                 .font(.title.bold())
 
-            Text("Track and categorize your spending from the menu bar. Import your Halifax bank transactions as CSV to get started.")
+            Text("See exactly where your money goes. Just import your Halifax statement to get started.")
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
@@ -22,8 +22,8 @@ struct OnboardingView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 Label("Log into Halifax online banking", systemImage: "1.circle")
-                Label("Go to your account and click \"Download\"", systemImage: "2.circle")
-                Label("Select CSV format and download", systemImage: "3.circle")
+                Label("Go to your account and download your statement", systemImage: "2.circle")
+                Label("Choose CSV or PDF format", systemImage: "3.circle")
                 Label("Import the file below", systemImage: "4.circle")
             }
             .font(.callout)

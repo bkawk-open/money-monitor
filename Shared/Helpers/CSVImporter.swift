@@ -35,10 +35,10 @@ struct CSVImporter {
             guard fields.count >= 8 else { continue }
 
             let dateString = fields[0].trimmingCharacters(in: .whitespaces)
-            let type = fields[1].trimmingCharacters(in: .whitespaces)
+            let _ = fields[1].trimmingCharacters(in: .whitespaces)
             let description = fields[4].trimmingCharacters(in: .whitespaces)
             let debitString = fields[5].trimmingCharacters(in: .whitespaces)
-            let creditString = fields[6].trimmingCharacters(in: .whitespaces)
+            let _ = fields[6].trimmingCharacters(in: .whitespaces)
 
             guard let date = dateFormatter.date(from: dateString) else { continue }
 

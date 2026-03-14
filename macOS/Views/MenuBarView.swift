@@ -89,10 +89,10 @@ struct MenuBarView: View {
                     .font(.system(size: 32))
                     .foregroundStyle(.secondary)
 
-                Text("No transactions yet")
+                Text("Nothing here yet")
                     .font(.headline)
 
-                Text("Export your transactions as CSV from Halifax online banking, then import the file here.")
+                Text("Download your Halifax statement and import it here. It only takes a moment.")
                     .font(.caption)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)

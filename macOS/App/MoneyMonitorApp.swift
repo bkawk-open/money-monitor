@@ -5,6 +5,7 @@ import SwiftData
 struct MoneyMonitorApp: App {
     @StateObject private var model = MoneyMonitorModel()
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @AppStorage("useMonochromeIcon") private var useMonochromeIcon = false
 
     let container: ModelContainer
 
@@ -30,10 +31,11 @@ struct MoneyMonitorApp: App {
                     }
                 }
         } label: {
-            Image(systemName: menuBarIcon)
-                .symbolRenderingMode(model.missingStatementForLastMonth ? .palette : .monochrome)
-                .foregroundStyle(model.missingStatementForLastMonth ? Color.red : Color.primary)
-                .symbolEffect(.pulse, isActive: model.uncategorizedCount > 0 || model.missingStatementForLastMonth)
+            if useMonochromeIcon {
+                Image(nsImage: monoMenuBarIcon)
+            } else {
+                Image(nsImage: colorMenuBarIcon)
+            }
         }
         .menuBarExtraStyle(.window)
 
@@ -51,11 +53,22 @@ struct MoneyMonitorApp: App {
 
     }
 
-    private var menuBarIcon: String {
-        if model.uncategorizedCount > 0 {
-            return "sterlingsign.circle.fill"
+    private var colorMenuBarIcon: NSImage {
+        guard let image = NSImage(named: "MenuBarIcon") else {
+            return NSImage(systemSymbolName: "sterlingsign.circle", accessibilityDescription: nil)!
         }
-        return "sterlingsign.circle"
+        image.size = NSSize(width: 18, height: 18)
+        image.isTemplate = false
+        return image
+    }
+
+    private var monoMenuBarIcon: NSImage {
+        guard let image = NSImage(named: "MenuBarIconMono") else {
+            return NSImage(systemSymbolName: "sterlingsign.circle", accessibilityDescription: nil)!
+        }
+        image.size = NSSize(width: 18, height: 18)
+        image.isTemplate = true
+        return image
     }
 }
 

@@ -2,12 +2,6 @@ import SwiftUI
 import SwiftData
 import Charts
 
-enum OccasionFilter: Equatable {
-    case all
-    case noOccasion
-    case occasion(PersistentIdentifier)
-}
-
 struct SpendingChartView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var model: MoneyMonitorModel
@@ -109,7 +103,7 @@ struct SpendingChartView: View {
                         Image(systemName: "chart.pie")
                             .font(.system(size: 32))
                             .foregroundStyle(.secondary)
-                        Text("No spending data")
+                        Text("Nothing to show yet")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -266,10 +260,7 @@ struct SpendingChartView: View {
     }
 
     private func formattedCurrency(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "GBP"
-        return formatter.string(from: NSNumber(value: value)) ?? "£\(value)"
+        CurrencyFormatter.format(value)
     }
 }
 
@@ -418,9 +409,6 @@ struct CategoryDetailView: View {
     }
 
     private func formattedAmount(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "GBP"
-        return formatter.string(from: NSNumber(value: abs(value))) ?? "£\(abs(value))"
+        CurrencyFormatter.formatAbsolute(value)
     }
 }

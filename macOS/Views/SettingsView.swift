@@ -216,7 +216,7 @@ private struct CategoriesSettingsView: View {
     private static let palette: [String] = [
         "E74C3C", "FF9800", "F1C40F", "2ECC71", "00BCD4",
         "3498DB", "9B59B6", "E91E63", "795548", "607D8B",
-        "1ABC9C", "FF5722", "8BC34A", "673AB7",
+        "1ABC9C", "FF5722", "8BC34A", "673AB7", "4CAF50",
     ]
 
     var body: some View {
@@ -258,23 +258,44 @@ private struct CategoriesSettingsView: View {
                                 .padding(.horizontal)
                                 .padding(.vertical, 6)
                             } else if editingCategory?.id == category.id {
-                                VStack(alignment: .leading, spacing: 6) {
-                                    HStack {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    HStack(spacing: 12) {
                                         TextField("Name", text: $editName)
-                                            .textFieldStyle(.roundedBorder)
-                                            .controlSize(.small)
-                                        Button("Save") {
+                                            .textFieldStyle(.plain)
+                                            .font(.caption)
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 6)
+                                            .background(Color.white.opacity(0.06))
+                                            .cornerRadius(8)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
+                                            )
+                                        Button {
                                             saveEdit(category)
+                                        } label: {
+                                            Text("Save")
+                                                .font(.caption)
+                                                .padding(.horizontal, 14)
+                                                .padding(.vertical, 6)
+                                                .background(Color.white.opacity(0.08))
+                                                .cornerRadius(8)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 8)
+                                                        .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
+                                                )
                                         }
-                                        .buttonStyle(.borderedProminent)
-                                        .controlSize(.small)
-                                        Button("Delete") {
+                                        .buttonStyle(.plain)
+                                        Button {
                                             categoryToDelete = category
                                             showDeleteCategoryConfirm = true
                                             editingCategory = nil
+                                        } label: {
+                                            Image(systemName: "trash")
+                                                .font(.caption2)
+                                                .foregroundStyle(.tertiary)
                                         }
-                                        .foregroundStyle(.red)
-                                        .controlSize(.small)
+                                        .buttonStyle(.plain)
                                     }
                                     HStack(spacing: 4) {
                                         ForEach(Self.palette, id: \.self) { hex in
@@ -287,36 +308,12 @@ private struct CategoriesSettingsView: View {
                                                 )
                                                 .onTapGesture {
                                                     editColorHex = hex
-                                                    showColorPicker = false
                                                 }
                                         }
-                                        Circle()
-                                            .fill(AngularGradient(
-                                                gradient: Gradient(colors: [.red, .yellow, .green, .cyan, .blue, .purple, .red]),
-                                                center: .center
-                                            ))
-                                            .frame(width: 16, height: 16)
-                                            .overlay(
-                                                Circle()
-                                                    .strokeBorder(Color.white, lineWidth: showColorPicker ? 2 : 0)
-                                            )
-                                            .onTapGesture {
-                                                showColorPicker.toggle()
-                                            }
-                                    }
-                                    if showColorPicker {
-                                        InlineColorPicker(
-                                            hue: $pickerHue,
-                                            saturation: $pickerSaturation,
-                                            brightness: $pickerBrightness
-                                        )
-                                        .onChange(of: pickerHue) { _, _ in updateHexFromPicker() }
-                                        .onChange(of: pickerSaturation) { _, _ in updateHexFromPicker() }
-                                        .onChange(of: pickerBrightness) { _, _ in updateHexFromPicker() }
                                     }
                                 }
                                 .padding(.horizontal)
-                                .padding(.vertical, 6)
+                                .padding(.vertical, 14)
                             } else {
                                 SettingsCategoryRow(
                                     category: category,
@@ -371,6 +368,7 @@ private struct OccasionsSettingsView: View {
     private static let palette: [String] = [
         "FF6B6B", "FFD93D", "6BCB77", "4D96FF", "FF8E53",
         "C780E8", "45B7D1", "F97B22", "20C997", "845EC2",
+        "FF6F91", "67E6DC", "FFC75F", "D65DB1", "2C73D2",
     ]
 
     private var nextColor: String {
@@ -408,23 +406,44 @@ private struct OccasionsSettingsView: View {
                             .padding(.horizontal)
                             .padding(.vertical, 6)
                         } else if editingOccasion?.id == occasion.id {
-                            VStack(alignment: .leading, spacing: 6) {
-                                HStack {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack(spacing: 8) {
                                     TextField("Name", text: $editName)
-                                        .textFieldStyle(.roundedBorder)
-                                        .controlSize(.small)
-                                    Button("Save") {
+                                        .textFieldStyle(.plain)
+                                        .font(.caption)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 6)
+                                        .background(Color.white.opacity(0.06))
+                                        .cornerRadius(8)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
+                                        )
+                                    Button {
                                         saveEdit(occasion)
+                                    } label: {
+                                        Text("Save")
+                                            .font(.caption)
+                                            .padding(.horizontal, 14)
+                                            .padding(.vertical, 6)
+                                            .background(Color.white.opacity(0.08))
+                                            .cornerRadius(8)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
+                                            )
                                     }
-                                    .buttonStyle(.borderedProminent)
-                                    .controlSize(.small)
-                                    Button("Delete") {
+                                    .buttonStyle(.plain)
+                                    Button {
                                         occasionToDelete = occasion
                                         showDeleteConfirm = true
                                         editingOccasion = nil
+                                    } label: {
+                                        Image(systemName: "trash")
+                                            .font(.caption2)
+                                            .foregroundStyle(.tertiary)
                                     }
-                                    .foregroundStyle(.red)
-                                    .controlSize(.small)
+                                    .buttonStyle(.plain)
                                 }
                                 HStack(spacing: 4) {
                                     ForEach(Self.palette, id: \.self) { hex in
@@ -442,7 +461,7 @@ private struct OccasionsSettingsView: View {
                                 }
                             }
                             .padding(.horizontal)
-                            .padding(.vertical, 6)
+                            .padding(.vertical, 14)
                         } else {
                             SettingsOccasionRow(
                                 occasion: occasion,
@@ -523,18 +542,22 @@ private struct SettingsOccasionRow: View {
 private struct GeneralSettingsView: View {
     let onBack: () -> Void
     @State private var launchAtLogin = LaunchAtLoginHelper.isEnabled
+    @AppStorage("useMonochromeIcon") private var useMonochromeIcon = false
 
     var body: some View {
         VStack(spacing: 0) {
             SettingsBackHeader(title: "General", onBack: onBack)
             Divider()
 
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 12) {
                 Toggle("Launch at Login", isOn: $launchAtLogin)
                     .font(.body)
                     .onChange(of: launchAtLogin) { _, _ in
                         LaunchAtLoginHelper.toggle()
                     }
+
+                Toggle("Monochrome Menu Bar Icon", isOn: $useMonochromeIcon)
+                    .font(.body)
             }
             .padding()
 
@@ -711,9 +734,10 @@ private struct AboutSettingsView: View {
             Divider()
 
             VStack(spacing: 12) {
-                Image(systemName: "sterlingsign.circle.fill")
-                    .font(.system(size: 48))
-                    .foregroundStyle(.blue)
+                Image("MenuBarIcon")
+                    .resizable()
+                    .interpolation(.high)
+                    .frame(width: 64, height: 64)
 
                 Text("Money Monitor")
                     .font(.headline)
@@ -722,7 +746,7 @@ private struct AboutSettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                Text("Track and categorize your spending from Halifax bank statements.")
+                Text("Your spending, sorted.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -743,33 +767,215 @@ private struct AboutSettingsView: View {
 
 // MARK: - Help
 
+private struct FAQItem: Identifiable {
+    let id = UUID()
+    let question: String
+    let answer: String
+}
+
+private let faqItems: [FAQItem] = [
+    FAQItem(
+        question: "How do I get my statements into the app?",
+        answer: "Log into Halifax online banking, download your statement as a CSV or PDF, and hit 'Import Statement' in the app. That's it."
+    ),
+    FAQItem(
+        question: "What file types work?",
+        answer: "CSV and PDF exports from Halifax online banking. Just download whichever you prefer."
+    ),
+    FAQItem(
+        question: "How does auto-categorising work?",
+        answer: "Sort one payment and every matching one is done automatically. So if you categorise one Tesco shop, they're all sorted in one go."
+    ),
+    FAQItem(
+        question: "Can I change my categories?",
+        answer: "Of course. Head to Settings then Categories. Tap any one to rename it, pick a new colour, or remove it."
+    ),
+    FAQItem(
+        question: "What are occasions for?",
+        answer: "They let you tag spending for things like holidays, birthdays, or Christmas — separate from your everyday categories. Handy for seeing what a trip actually cost you."
+    ),
+    FAQItem(
+        question: "How do I get a spending report?",
+        answer: "On the Spending tab, hit the Export button below the chart. You'll get a PDF breakdown of that month's spending."
+    ),
+    FAQItem(
+        question: "Is my data safe?",
+        answer: "Everything stays on your device. Nothing is sent anywhere — your financial information never leaves your Mac."
+    ),
+    FAQItem(
+        question: "Does it work with other banks?",
+        answer: "Right now it's just Halifax. We're looking at adding more UK banks in future."
+    ),
+]
+
 private struct HelpSettingsView: View {
     let onBack: () -> Void
+
+    @State private var expandedFAQ: UUID?
+    @State private var subject = ""
+    @State private var messageBody = ""
+    @State private var showSentConfirmation = false
 
     var body: some View {
         VStack(spacing: 0) {
             SettingsBackHeader(title: "Help", onBack: onBack)
             Divider()
 
-            VStack(alignment: .leading, spacing: 12) {
-                Text("MoneyMonitor helps you track and categorize your spending from Halifax bank statements.")
-                    .font(.body)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    // FAQ Section
+                    Text("Frequently Asked Questions")
+                        .font(.body.bold())
+                        .padding(.horizontal)
+                        .padding(.top, 14)
+                        .padding(.bottom, 8)
 
-                Text("Getting Started")
-                    .font(.body.bold())
-                Text("1. Export your transactions as CSV or PDF from Halifax online banking\n2. Click Import Statement to load them\n3. Tap each transaction to assign it to a category\n4. View your spending breakdown on the Spending tab")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    ForEach(faqItems) { item in
+                        FAQRowView(item: item, expandedID: $expandedFAQ)
+                        Divider()
+                    }
 
-                Text("Tips")
-                    .font(.body.bold())
-                Text("When you categorize a transaction, all other transactions with the same description are automatically categorized too.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    // Contact Section
+                    Text("Get in Touch")
+                        .font(.body.bold())
+                        .padding(.horizontal)
+                        .padding(.top, 18)
+                        .padding(.bottom, 4)
+
+                    Text("Got a question or an idea? We'd love to hear from you.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal)
+                        .padding(.bottom, 12)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        TextField("Subject", text: $subject)
+                            .textFieldStyle(.plain)
+                            .font(.caption)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 6)
+                            .background(Color.white.opacity(0.06))
+                            .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
+                            )
+
+                        TextEditor(text: $messageBody)
+                            .font(.caption)
+                            .scrollContentBackground(.hidden)
+                            .padding(4)
+                            .frame(minHeight: 70, maxHeight: 100)
+                            .background(Color.white.opacity(0.06))
+                            .cornerRadius(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
+                            )
+
+                        HStack {
+                            if showSentConfirmation {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.caption)
+                                        .foregroundStyle(.green)
+                                    Text("Opened in your email app")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            Spacer()
+                            Button {
+                                sendFeedback()
+                            } label: {
+                                Text("Send")
+                                    .font(.caption)
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 6)
+                                    .background(Color.white.opacity(0.08))
+                                    .cornerRadius(8)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
+                                    )
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(subject.trimmingCharacters(in: .whitespaces).isEmpty && messageBody.trimmingCharacters(in: .whitespaces).isEmpty)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 14)
+                }
             }
-            .padding()
+        }
+    }
 
-            Spacer()
+    private func sendFeedback() {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"
+        let body = "\(messageBody)\n\n---\nMoneyMonitor v\(version) (\(build))"
+
+        if let service = NSSharingService(named: .composeEmail) {
+            service.recipients = ["support@moneymonitor.app"]
+            service.subject = subject.isEmpty ? "MoneyMonitor Feedback" : subject
+            service.perform(withItems: [body])
+        } else {
+            let subjectEncoded = (subject.isEmpty ? "MoneyMonitor Feedback" : subject)
+                .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            let bodyEncoded = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            if let url = URL(string: "mailto:support@moneymonitor.app?subject=\(subjectEncoded)&body=\(bodyEncoded)") {
+                NSWorkspace.shared.open(url)
+            }
+        }
+
+        showSentConfirmation = true
+        subject = ""
+        messageBody = ""
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            showSentConfirmation = false
+        }
+    }
+}
+
+private struct FAQRowView: View {
+    let item: FAQItem
+    @Binding var expandedID: UUID?
+    @State private var isHovered = false
+
+    private var isExpanded: Bool { expandedID == item.id }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Text(item.question)
+                    .font(.caption)
+                    .lineLimit(isExpanded ? nil : 2)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .rotationEffect(.degrees(isExpanded ? 90 : 0))
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(isHovered ? Color.white.opacity(0.08) : Color.white.opacity(0.03))
+            .contentShape(Rectangle())
+            .onTapGesture {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    expandedID = isExpanded ? nil : item.id
+                }
+            }
+            .onHover { hovering in isHovered = hovering }
+
+            if isExpanded {
+                Text(item.answer)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                    .padding(.bottom, 12)
+                    .transition(.opacity)
+            }
         }
     }
 }

@@ -179,10 +179,7 @@ struct CategoryPickerView: View {
     }
 
     private var formattedAmount: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "GBP"
-        return formatter.string(from: NSNumber(value: abs(transaction.amount))) ?? "\(transaction.amount)"
+        CurrencyFormatter.formatAbsolute(transaction.amount)
     }
 
     private func assignCategory(_ category: Category) {
@@ -204,102 +201,12 @@ struct CategoryPickerView: View {
         onDone()
     }
 
-    private static let defaultCategories: [(String, String)] = [
-        ("Housing", "3498DB"),
-        ("Bills & Utilities", "E67E22"),
-        ("Groceries", "2ECC71"),
-        ("Transport", "1ABC9C"),
-        ("Shopping", "9B59B6"),
-        ("Eating Out", "E91E63"),
-        ("Subscriptions", "00BCD4"),
-        ("Travel", "8BC34A"),
-        ("Health & Fitness", "FF9800"),
-        ("Entertainment", "E74C3C"),
-        ("Financial", "607D8B"),
-        ("Transfers", "795548"),
-        ("Gambling", "FF5722"),
-        ("Other", "673AB7"),
-    ]
-
     private func seedDefaultCategoriesIfNeeded() {
-        guard categories.isEmpty else { return }
-        for (name, color) in Self.defaultCategories {
-            modelContext.insert(Category(name: name, colorHex: color))
-        }
-        try? modelContext.save()
+        DefaultData.seedCategoriesIfNeeded(into: modelContext, existingCount: categories.count)
     }
-
-    private static let defaultOccasions: [(String, String)] = [
-        ("Holiday", "FF6B6B"),
-        ("Birthday", "FFD93D"),
-        ("Wedding", "6BCB77"),
-        ("Christmas", "4D96FF"),
-        ("Moving House", "FF8E53"),
-        ("New Baby", "C780E8"),
-        ("Graduation", "45B7D1"),
-        ("Anniversary", "F97B22"),
-        ("Weekend Trip", "20C997"),
-        ("Night Out", "845EC2"),
-        ("Work Travel", "FF6F91"),
-        ("Family Visit", "67E6DC"),
-        ("Home Improvement", "FFC75F"),
-        ("Car Purchase", "D65DB1"),
-        ("Medical", "2C73D2"),
-    ]
 
     private func seedDefaultOccasionsIfNeeded() {
-        guard occasions.isEmpty else { return }
-        for (name, color) in Self.defaultOccasions {
-            modelContext.insert(Occasion(name: name, colorHex: color))
-        }
-        try? modelContext.save()
+        DefaultData.seedOccasionsIfNeeded(into: modelContext, existingCount: occasions.count)
     }
 
-}
-
-private struct FlowLayout: Layout {
-    var spacing: CGFloat = 6
-
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let result = arrange(proposal: proposal, subviews: subviews)
-        return result.size
-    }
-
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let result = arrange(proposal: proposal, subviews: subviews)
-        for (index, position) in result.positions.enumerated() {
-            subviews[index].place(at: CGPoint(x: bounds.minX + position.x, y: bounds.minY + position.y),
-                                  proposal: .unspecified)
-        }
-    }
-
-    private struct ArrangeResult {
-        var size: CGSize
-        var positions: [CGPoint]
-    }
-
-    private func arrange(proposal: ProposedViewSize, subviews: Subviews) -> ArrangeResult {
-        let maxWidth = proposal.width ?? .infinity
-        var positions: [CGPoint] = []
-        var x: CGFloat = 0
-        var y: CGFloat = 0
-        var rowHeight: CGFloat = 0
-
-        for subview in subviews {
-            let size = subview.sizeThatFits(.unspecified)
-            if x + size.width > maxWidth && x > 0 {
-                x = 0
-                y += rowHeight + spacing
-                rowHeight = 0
-            }
-            positions.append(CGPoint(x: x, y: y))
-            rowHeight = max(rowHeight, size.height)
-            x += size.width + spacing
-        }
-
-        return ArrangeResult(
-            size: CGSize(width: maxWidth, height: y + rowHeight),
-            positions: positions
-        )
-    }
 }

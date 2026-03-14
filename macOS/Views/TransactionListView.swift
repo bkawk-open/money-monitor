@@ -84,10 +84,7 @@ struct TransactionListView: View {
 
     private var uncategorizedTotal: String {
         let total = uncategorized.reduce(0.0) { $0 + abs($1.amount) }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "GBP"
-        return formatter.string(from: NSNumber(value: total)) ?? "£\(total)"
+        return CurrencyFormatter.format(total)
     }
 
     private struct DateGroup {
@@ -166,7 +163,7 @@ struct TransactionListView: View {
                     Image(systemName: "checkmark.circle")
                         .font(.system(size: 32))
                         .foregroundStyle(.green)
-                    Text("All caught up!")
+                    Text("You're all sorted")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     if let lastDate = model.lastTransactionDate {
@@ -254,9 +251,6 @@ struct TransactionRow: View {
     }
 
     private var formattedAmount: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "GBP"
-        return formatter.string(from: NSNumber(value: abs(transaction.amount))) ?? "£\(abs(transaction.amount))"
+        CurrencyFormatter.formatAbsolute(transaction.amount)
     }
 }

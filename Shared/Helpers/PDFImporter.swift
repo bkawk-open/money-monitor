@@ -301,7 +301,7 @@ struct PDFImporter {
         // Second pass: find balance values after each inline transaction
         // Scan for numeric values that follow the inline block and could be balances
         var balancesAfterInline: [Double] = []
-        let lastCandidateEnd = candidates.last!.lineIndex + 4
+        let _ = candidates.last!.lineIndex + 4
         for j in (candidates.first!.lineIndex + 4)..<lines.count {
             let line = lines[j]
             let cleaned = line.hasSuffix(".") ? String(line.dropLast()) : line

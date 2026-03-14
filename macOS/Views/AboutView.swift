@@ -14,7 +14,7 @@ struct AboutView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            Text("Track and categorize your Halifax spending from the menu bar.")
+            Text("Your spending, sorted.")
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)

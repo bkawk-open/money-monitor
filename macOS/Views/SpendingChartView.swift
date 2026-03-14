@@ -2,12 +2,6 @@ import SwiftUI
 import SwiftData
 import Charts
 
-enum OccasionFilter: Equatable {
-    case all
-    case noOccasion
-    case occasion(PersistentIdentifier)
-}
-
 struct SpendingChartView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var model: MoneyMonitorModel
@@ -45,7 +39,7 @@ struct SpendingChartView: View {
     }
 
     private var spendingContent: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 0) {
             HStack {
                 Button {
                     selectedMonth = Calendar.current.date(byAdding: .month, value: -1, to: selectedMonth) ?? selectedMonth
@@ -107,77 +101,13 @@ struct SpendingChartView: View {
                     Image(systemName: "chart.pie")
                         .font(.system(size: 32))
                         .foregroundStyle(.secondary)
-                    Text("No categorized spending this month")
+                    Text("Nothing categorised yet this month")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                ZStack {
-                    Chart(chartData, id: \.name) { item in
-                        SectorMark(
-                            angle: .value("Amount", item.total),
-                            innerRadius: .ratio(0.5),
-                            angularInset: 1.5
-                        )
-                        .foregroundStyle(Color(hex: item.colorHex))
-                        .opacity(hoveredItem == nil || hoveredItem == item.name ? 1 : 0.4)
-                    }
-                    .chartOverlay { proxy in
-                        GeometryReader { geo in
-                            Rectangle()
-                                .fill(.clear)
-                                .contentShape(Rectangle())
-                                .onContinuousHover { phase in
-                                    switch phase {
-                                    case .active(let location):
-                                        let center = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
-                                        let dx = location.x - center.x
-                                        let dy = location.y - center.y
-                                        let distance = sqrt(dx * dx + dy * dy)
-                                        let outerRadius = min(geo.size.width, geo.size.height) / 2
-                                        let innerRadius = outerRadius * 0.5
-
-                                        if distance >= innerRadius && distance <= outerRadius {
-                                            // Angle from top, clockwise (matching SwiftUI Charts)
-                                            var angle = atan2(dx, -dy)
-                                            if angle < 0 { angle += 2 * .pi }
-                                            let totalValue = chartData.reduce(0.0) { $0 + $1.total }
-                                            var cumulative = 0.0
-                                            for item in chartData {
-                                                cumulative += item.total
-                                                if angle <= (cumulative / totalValue) * 2 * .pi {
-                                                    hoveredItem = item.name
-                                                    break
-                                                }
-                                            }
-                                        } else {
-                                            hoveredItem = nil
-                                        }
-                                    case .ended:
-                                        hoveredItem = nil
-                                    }
-                                }
-                        }
-                    }
-
-                    // Center label
-                    if let name = hoveredItem, let item = chartData.first(where: { $0.name == name }) {
-                        VStack(spacing: 2) {
-                            Text("\(Int(item.percentage))%")
-                                .font(.title2.bold())
-                            Text(item.name)
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
-                        }
-                        .allowsHitTesting(false)
-                    }
-                }
-                .frame(height: 180)
-                .padding(.horizontal)
-
-                HStack {
+                HStack(alignment: .bottom) {
                     Button {
                         exportPDF()
                     } label: {
@@ -190,10 +120,76 @@ struct SpendingChartView: View {
                         .foregroundStyle(.secondary)
                     }
                     .buttonStyle(.plain)
-                    Spacer()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    ZStack {
+                        Chart(chartData, id: \.name) { item in
+                            SectorMark(
+                                angle: .value("Amount", item.total),
+                                innerRadius: .ratio(0.5),
+                                angularInset: 1.5
+                            )
+                            .foregroundStyle(Color(hex: item.colorHex))
+                            .opacity(hoveredItem == nil || hoveredItem == item.name ? 1 : 0.4)
+                        }
+                        .chartOverlay { proxy in
+                            GeometryReader { geo in
+                                Rectangle()
+                                    .fill(.clear)
+                                    .contentShape(Rectangle())
+                                    .onContinuousHover { phase in
+                                        switch phase {
+                                        case .active(let location):
+                                            let center = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
+                                            let dx = location.x - center.x
+                                            let dy = location.y - center.y
+                                            let distance = sqrt(dx * dx + dy * dy)
+                                            let outerRadius = min(geo.size.width, geo.size.height) / 2
+                                            let innerRadius = outerRadius * 0.5
+
+                                            if distance >= innerRadius && distance <= outerRadius {
+                                                var angle = atan2(dx, -dy)
+                                                if angle < 0 { angle += 2 * .pi }
+                                                let totalValue = chartData.reduce(0.0) { $0 + $1.total }
+                                                var cumulative = 0.0
+                                                for item in chartData {
+                                                    cumulative += item.total
+                                                    if angle <= (cumulative / totalValue) * 2 * .pi {
+                                                        hoveredItem = item.name
+                                                        break
+                                                    }
+                                                }
+                                            } else {
+                                                hoveredItem = nil
+                                            }
+                                        case .ended:
+                                            hoveredItem = nil
+                                        }
+                                    }
+                            }
+                        }
+
+                        if let name = hoveredItem, let item = chartData.first(where: { $0.name == name }) {
+                            VStack(spacing: 2) {
+                                Text("\(Int(item.percentage))%")
+                                    .font(.title2.bold())
+                                Text(item.name)
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                            }
+                            .allowsHitTesting(false)
+                        }
+                    }
+                    .frame(width: 180, height: 180)
+
+                    Color.clear
+                        .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 4)
+                .padding(.top, 4)
+                .padding(.bottom, 14)
+                .fixedSize(horizontal: false, vertical: true)
 
                 Divider()
 
@@ -311,10 +307,7 @@ struct SpendingChartView: View {
     }
 
     private func formattedCurrency(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "GBP"
-        return formatter.string(from: NSNumber(value: value)) ?? "£\(value)"
+        CurrencyFormatter.format(value)
     }
 
     private func exportPDF() {
@@ -505,10 +498,7 @@ private struct SpendingRow: View {
     }
 
     private func formattedCurrency(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "GBP"
-        return formatter.string(from: NSNumber(value: value)) ?? "£\(value)"
+        CurrencyFormatter.format(value)
     }
 }
 
@@ -701,10 +691,7 @@ struct CategoryDetailView: View {
     }
 
     private func formattedAmount(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "GBP"
-        return formatter.string(from: NSNumber(value: abs(value))) ?? "£\(abs(value))"
+        CurrencyFormatter.formatAbsolute(value)
     }
 }
 
@@ -742,9 +729,6 @@ private struct CategoryTransactionRow: View {
     }
 
     private var formattedAmount: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "GBP"
-        return formatter.string(from: NSNumber(value: abs(transaction.amount))) ?? "£\(abs(transaction.amount))"
+        CurrencyFormatter.formatAbsolute(transaction.amount)
     }
 }
