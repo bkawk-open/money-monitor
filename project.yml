@@ -1,0 +1,127 @@
+name: MoneyMonitor
+options:
+  bundleIdPrefix: com.bkawk
+  xcodeVersion: "16.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  MoneyMonitor-macOS:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Shared
+      - path: macOS
+        excludes:
+          - Resources
+    resources:
+      - path: macOS/Resources/Assets.xcassets
+    info:
+      path: macOS/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: Money Monitor
+        CFBundleName: MoneyMonitor
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        LSUIElement: true
+        LSApplicationCategoryType: public.app-category.finance
+        NSHumanReadableCopyright: "Copyright © 2026 bkawk. All rights reserved."
+    entitlements:
+      path: macOS/Resources/MoneyMonitor.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+        com.apple.security.network.client: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bkawk.MoneyMonitor
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        ENABLE_HARDENED_RUNTIME: YES
+    scheme:
+      testTargets:
+        - MoneyMonitor-Tests
+
+  MoneyMonitor-Tests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Tests
+    dependencies:
+      - target: MoneyMonitor-macOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bkawk.MoneyMonitor.Tests
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        GENERATE_INFOPLIST_FILE: YES
+
+  MoneyMonitor-iOS:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Shared
+      - path: iOS/App
+      - path: iOS/Views
+    resources:
+      - path: iOS/Resources/Assets.xcassets
+    info:
+      path: iOS/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: Money Monitor
+        CFBundleName: MoneyMonitor
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        UILaunchScreen: {}
+        LSApplicationCategoryType: public.app-category.finance
+    entitlements:
+      path: iOS/Resources/MoneyMonitor-iOS.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.bkawk.MoneyMonitor
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bkawk.MoneyMonitor
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+        DEVELOPMENT_TEAM: V5QABG542Q
+    dependencies:
+      - target: MoneyMonitor-ShareExtension
+    scheme:
+      testTargets: []
+
+  MoneyMonitor-ShareExtension:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Shared
+      - path: iOS/ShareExtension
+    entitlements:
+      path: iOS/ShareExtension/ShareExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.bkawk.MoneyMonitor
+    info:
+      path: iOS/ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Import Statement
+        CFBundleName: MoneyMonitor-ShareExtension
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        NSExtension:
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsFileWithMaxCount: 1
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bkawk.MoneyMonitor.ShareExtension
+        IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+        APPLICATION_EXTENSION_API_ONLY: YES
+        DEVELOPMENT_TEAM: V5QABG542Q

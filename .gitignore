@@ -1,0 +1,13 @@
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
+xcuserdata/
+*.xcuserdatad
+DerivedData/
+.build/
+.swiftpm/
+*.xcodeproj
+build/
+data/
+._*
